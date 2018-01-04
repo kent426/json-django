@@ -23,33 +23,109 @@
 </html>
 <script type="text/javascript">
 
-  function DataManager() {
+  function DataManager(api0,api1,api2) {
     this.fetched_data = []
     this.current_mode = 0
     this.current_data = []
     this.displayed_data = []
+    this.currentapi = api0
+    this.api0 = api0
+    this.api1 = api1
+    this.api2 = api2
 
-    this.initData = function() {
-      this.current_data = 0
-      return this.current_data
+    bool_ajaxing = false
+
+    this.start_service = function() {
+      this.init_data()
+      //retrieve and render table
+      this.start_polling()
     }
 
+    this.init_data = function() {
+      this.current_mode = 0
+      this.currentapi = this.api0
+      
+    }
+
+    // user drop down respond func
+    this.choose_period = function(arg) {
+      if(arg == 0)
+        this.currentapi = this.api0
+      else if(arg == 1 ) 
+        this.currentapi = this.api1
+      else
+        this,currentapi = this.api2
+    }
+
+    this.is_latest = function(cur_data, server_data) {
+
+    } 
+
+    this.render_popup = function(js_data) {
+
+    }
+
+    this.confirm_popup = function (js_data) {
+      this.render_table(js_data)
+    }
+
+    this.dismiss_popup = function() {
+
+    }
+
+    this.render_table = function(js_data) {
+
+    }
+
+    this.start_polling = function poll() {
+      that = this
+
+      setInterval(function() {
+        $.ajax({
+          url : that.currentapi, // the endpoint,commonly same url
+          type : "GET", // http method
+  // data sent with the post request
+
+  //  // handle a successful response
+          success : function(json) {
+            console.log(json); // another sanity check
+    //On success show the data posted to server as a message
+
+            if(!that.is_latest(that.current_data,json)) {
+              that.current_data = json
+              that.displayed_data = json
+              that.render_popup(json)
+            }
+
+            console.log("here ajaxing")
+            console.log(this.url)
+          },
+
+          //  // handle a non-successful response
+          error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          },
+          timeout:2000
+
+        });
+      },2000)
 
 
-
+    }
   }
 
 
 
   $(document).ready(function(){
 
-    dataManager = new DataManager()
-    console.log(dataManager.initData(), "hello")
+
     var base = window.location.protocol + "//" + window.location.host
     var api0 = base + "{% url 'getmeta' 0 %}"
     var api1 = base + "{% url 'getmeta' 1 %}"
     var api2 = base + "{% url 'getmeta' 2 %}"
 
+    dataManager = new DataManager(api0,api1,api2)
+    dataManager.start_polling()
     console.log(base)
     console.log(api0)
 
@@ -66,23 +142,7 @@ e.preventDefault();
 
 // //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
 // //Send data  
-$.ajax({
-        url : api0, // the endpoint,commonly same url
-        type : "GET", // http method
-// data sent with the post request
 
-//  // handle a successful response
-success : function(json) {
-  console.log(json); // another sanity check
-  //On success show the data posted to server as a message
-},
-
-//  // handle a non-successful response
-error : function(xhr,errmsg,err) {
-  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-}
-
-});
 
 });
 });
