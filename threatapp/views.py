@@ -10,11 +10,19 @@ import string
 
 from django.http import JsonResponse
 
+from django.views.decorators.cache import never_cache
+
+@never_cache
+def index(request):
+
+     return render(
+         request,
+         'index.html',
+     )
 
 
-
-
-def index(request, periodtype):
+@never_cache
+def getmeta(request, periodtype):
     """
     View function for home page of site.
     """
@@ -34,15 +42,14 @@ def index(request, periodtype):
 
     	#safely evaluate the string to python list
     	list_data = ast.literal_eval(text)
-    	
-    	js_data = json.dumps(list_data)
 
 
-    fh.closed	
+    fh.closed
+    return JsonResponse(list_data, safe = False)
     
     # Render the HTML template index.html with the data in the context variable
-    return render(
-        request,
-        'index.html',
-        context={'pt':periodtype, 'jsdata' : js_data},
-    )
+    # return render(
+    #     request,
+    #     'index.html',
+    #     context={'pt':periodtype, 'data' : obj},
+    # )

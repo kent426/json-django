@@ -4,5 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^(?P<periodtype>[012])$', views.index, name='index'),
+    url(r'^$', views.index, name='index'),
+    url(r'^api/(?P<periodtype>[012])$', views.getmeta, name="getmeta"),
         ]

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
+
   {% block title %}<title>Local Library</title>{% endblock %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,14 +16,74 @@
 
 <body>
 
-<h1 class="ptype">{{pt}}</h1>
+  <button class="ptype">hello</button>
 
 
 </body>
 </html>
 <script type="text/javascript">
-$(document).ready(function(){
-  var data = "{{ jsdata }}"
-  console.log(data)
+
+  function DataManager() {
+    this.fetched_data = []
+    this.current_mode = 0
+    this.current_data = []
+    this.displayed_data = []
+
+    this.initData = function() {
+      this.current_data = 0
+      return this.current_data
+    }
+
+
+
+
+  }
+
+
+
+  $(document).ready(function(){
+
+    dataManager = new DataManager()
+    console.log(dataManager.initData(), "hello")
+    var base = window.location.protocol + "//" + window.location.host
+    var api0 = base + "{% url 'getmeta' 0 %}"
+    var api1 = base + "{% url 'getmeta' 1 %}"
+    var api2 = base + "{% url 'getmeta' 2 %}"
+
+    console.log(base)
+    console.log(api0)
+
+    console.log("hello")
+
+  //For doing AJAX post
+
+// //When submit is clicked
+$(".ptype").click(function(e) {
+
+// //Prevent default submit. Must for Ajax post.Beginner's pit.
+e.preventDefault();
+
+
+// //This is the Ajax post.Observe carefully. It is nothing but details of where_to_post,what_to_post
+// //Send data  
+$.ajax({
+        url : api0, // the endpoint,commonly same url
+        type : "GET", // http method
+// data sent with the post request
+
+//  // handle a successful response
+success : function(json) {
+  console.log(json); // another sanity check
+  //On success show the data posted to server as a message
+},
+
+//  // handle a non-successful response
+error : function(xhr,errmsg,err) {
+  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+}
+
+});
+
+});
 });
 </script>
