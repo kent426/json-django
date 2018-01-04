@@ -8,6 +8,9 @@ from django.conf import settings
 
 import string
 
+from django.http import JsonResponse
+
+
 
 
 
@@ -24,14 +27,16 @@ def index(request, periodtype):
     	#convert whitespace characters to a single space
     	text = text.translate(str.maketrans("\t\n\r\x0b\x0c", "     "))
 
-    	print(text)
+    	#print(text)
     	# js_str = json.dumps(text)
     	# obj = json.loads(js_str)
     	# print(js_str)
 
     	#safely evaluate the string to python list
-    	obj = ast.literal_eval(text)
-    	print(type(obj))
+    	list_data = ast.literal_eval(text)
+    	
+    	js_data = json.dumps(list_data)
+
 
     fh.closed	
     
@@ -39,5 +44,5 @@ def index(request, periodtype):
     return render(
         request,
         'index.html',
-        context={'pt':periodtype, 'data' : obj},
+        context={'pt':periodtype, 'jsdata' : js_data},
     )
