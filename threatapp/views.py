@@ -1,9 +1,12 @@
 from django.shortcuts import render
 
 import json
+import ast
 
 import os
 from django.conf import settings
+
+import string
 
 
 
@@ -12,16 +15,29 @@ def index(request, periodtype):
     """
     View function for home page of site.
     """
-    fh = open(settings.THREAT_FILE)
+    with open(settings.THREAT_FILE, 'rb') as fh:
+    	
+    	data = fh.read()
+    	text = data.decode('utf-8')
+    	# replace Unicode for the single left and right quote characters with the ACSII equivalent
+    	text = text.replace(u"\u2018", "'").replace(u"\u2019", "'")
+    	#convert whitespace characters to a single space
+    	text = text.translate(str.maketrans("\t\n\r\x0b\x0c", "     "))
 
-    x = json.load(fh)
+    	print(text)
+    	# js_str = json.dumps(text)
+    	# obj = json.loads(js_str)
+    	# print(js_str)
 
-    print(x)
+    	#safely evaluate the string to python list
+    	obj = ast.literal_eval(text)
+    	print(type(obj))
 
+    fh.closed	
     
     # Render the HTML template index.html with the data in the context variable
     return render(
         request,
         'index.html',
-        context={'pt':periodtype},
+        context={'pt':periodtype, 'data' : obj},
     )
