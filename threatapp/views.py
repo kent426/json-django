@@ -63,10 +63,5 @@ def getmeta(request, periodtype):
     		start_today = cur_date - timedelta(1)
     		js_data = list(filter(lambda record: datetime.strptime(record["date"], '%b %d, %Y %H:%M:%S') > start_today and datetime.strptime(record["date"], '%b %d, %Y %H:%M:%S') < cur_date, list_data))
     	#print(js_data)
-
-
-    	
-
-
     fh.closed
     return JsonResponse(js_data, safe = False)
