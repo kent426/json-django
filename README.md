@@ -10,20 +10,18 @@
 
 3. Serve the website:
    - cd into the directory contains manage.py
-   - run command in terminal: python3 manage.py runserver
+   - run command in terminal: **python3 manage.py runserver**
 
 4. Open the site on browser: http://127.0.0.1:8000/
 
 
-
+----------file location-------------
 threat file location:
-	json-django/threatapp/static/filesRecords/xthreat.txt
-
-Where json-django is the project root directory.
-And file name has to be threat.txt
-
+	**json-django/threatapp/static/filesRecords/threat.txt**, where json-django is the project root directory. 
+	File name has to be **threat.txt**.
 
 ------------------------------------
-
+5. run tests:
+under directory contains manage.py, run command: **python3 manage.py test**
 
 		
