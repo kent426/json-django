@@ -18,6 +18,34 @@
 ‘filename’: ‘helper.exe’,
 ‘action’: ‘files-added’,
 ‘submit-type’: ‘FG300B3910602113/root’,
-‘rating’: ‘low-risk’
+‘rating’: ‘Medium-Risk’
+},
+{
+‘date’: ‘Jan 1, 2015 03:12:59’,
+‘filename’: ‘hr.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘High-Risk’
+},
+{
+‘date’: ‘Jan 1, 2015 01:12:59’,
+‘filename’: ‘cl.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘Clean’
+},
+{
+‘date’: ‘Jan 1, 2017 13:12:59’,
+‘filename’: ‘xxxx.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘clean’
+},
+{
+‘date’: ‘Jan 1, 2014 13:12:59’,
+‘filename’: ‘ma.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘Malicious’
 }
 ]
