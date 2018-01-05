@@ -223,7 +223,7 @@ function DataManager(api0,api1,api2) {
 
           //  // handle a non-successful response
           error : function(xhr,errmsg,err) {
-            console.log("something went wrong.")
+            console.log("something went wrong.",err)
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
           },
           // tear down when ajax is done
