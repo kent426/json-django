@@ -8,6 +8,23 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- jquery -->
+  {% load static %}
+  <script rel="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+  <!-- jquery ui -->
+  {% load static %}
+  <script rel="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+
+  {% load static %}
+  <script rel="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+
+  <!-- lodash  for  json deep comparsion -->
+  <script src ="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  <!-- tabulator for table displaying -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.2/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.3.2/js/tabulator.min.js"></script>
+
   
   <!-- Add additional CSS in static file -->
   {% load static %}
@@ -15,10 +32,8 @@
 </head>
 
 <body>
-
-  <button class="ptype">hello</button>
-
-
+  <h1>Metafile Record Table</h1>
+  <div id="threat-table"> </div>
 </body>
 </html>
 <script type="text/javascript">
@@ -33,7 +48,7 @@
     this.api1 = api1
     this.api2 = api2
 
-    bool_ajaxing = false
+    this.firstTimeLoad = true
 
     this.start_service = function() {
       this.init_data()
@@ -58,10 +73,13 @@
     }
 
     this.is_latest = function(cur_data, server_data) {
-
+      //Performs a deep comparison between two values to determine if they are equivalent.
+      //From https://lodash.com/docs/4.17.4#isEqual.
+      return _.isEqual(cur_data, server_data)
     } 
 
     this.render_popup = function(js_data) {
+
 
     }
 
@@ -74,6 +92,58 @@
     }
 
     this.render_table = function(js_data) {
+
+      $("#threat-table").tabulator({
+        height:"100%",// set height of table, this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+          layout:"fitColumns", //fit columns to width of table (optional)
+          responsiveLayout:true,
+          columns:[ //Define Table Columns
+              {title:"File Name", field:"filename",align:"center"},
+              {title:"Rating", field:"rating",align:"center"},
+              {title:"Action", field:"action", align:"center"},
+              {title:"Submit-Type", field:"submit-type",align:"center"},
+              {title:"Date", field:"date", sorter:"date", align:"center"},
+          ],
+        rowFormatter:function(row){
+        //row - row component
+
+          var data = row.getData();
+          switch(data.rating) {
+              case "malicious":
+              case "Malicious":
+                  row.getElement().css({"background-color":"Red"})
+                  break;
+              case "high-risk":
+              case "High-Risk":
+                  row.getElement().css({"background-color":"Orange"})
+                  break;
+              case "medium-risk":
+              case "Medium-Risk":
+                  row.getElement().css({"background-color":"LightSalmon"})
+                  break;
+              case "low-risk":
+              case "Low-Risk":
+                  row.getElement().css({"background-color":"LightGoldenRodYellow"})
+                  break;
+              case "clean":
+              case "Clean":
+                  row.getElement().css({"background-color":"LightCyan"})
+                  break;
+              default:
+                  row.getElement().css({"background-color":"white"})
+          }
+        },
+      });
+
+      //load sample data into the table
+      $("#threat-table").tabulator("setData", js_data);
+
+      $(".tabulator-col-title").css("text-align","center")
+
+      //$(".tabulator-tableHolder").css("background","white")
+
+
+
 
     }
 
@@ -90,11 +160,20 @@
           success : function(json) {
             console.log(json); // another sanity check
     //On success show the data posted to server as a message
+            // console.log(that.is_latest(that.current_data,json))
 
             if(!that.is_latest(that.current_data,json)) {
-              that.current_data = json
-              that.displayed_data = json
-              that.render_popup(json)
+              that.current_data = JSON.parse(JSON.stringify(json))
+
+              if(that.firstTimeLoad) {
+                that.firstTimeLoad = false
+                that.displayed_data = JSON.parse(JSON.stringify(json))
+                that.render_table(json)
+                console.log("first time")
+              } else {
+                that.render_popup(json)
+                console.log(" not first time")
+              }
             }
 
             console.log("here ajaxing")
@@ -108,7 +187,7 @@
           timeout:2000
 
         });
-      },2000)
+      },1000)
 
 
     }
@@ -125,7 +204,7 @@
     var api2 = base + "{% url 'getmeta' 2 %}"
 
     dataManager = new DataManager(api0,api1,api2)
-    dataManager.start_polling()
+    dataManager.start_service()
     console.log(base)
     console.log(api0)
 
