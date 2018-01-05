@@ -61,5 +61,19 @@
 ‘action’: ‘files-added’,
 ‘submit-type’: ‘FG300B3910602113/root’,
 ‘rating’: ‘Malicious’
+},
+{
+‘date’: ‘Jan 5, 2018 00:12:59’,
+‘filename’: ‘cl.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘Clean’
+},
+{
+‘date’: ‘Dec 31, 2017 00:12:59’,
+‘filename’: ‘cl.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘Clean’
 }
 ]

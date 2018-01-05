@@ -114,7 +114,7 @@ function DataManager(api0,api1,api2) {
             return level_sort_helper_dict[a]- level_sort_helper_dict[b] ;} },
             {title:"Action", field:"action", align:"center"},
             {title:"Submit-Type", field:"submit-type",align:"center"},
-            {title:"Date", field:"date", sorter:"date",sorterParams:{format:"MMM DD, YYYY HH:MM:SS"}, align:"center"},
+            {title:"Date", field:"date", sorter:"date",sorterParams:{format:"MMM DD, YYYY HH:mm:ss"}, align:"center"},
       ],
 
       // row color distribution
