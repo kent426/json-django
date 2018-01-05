@@ -59,6 +59,7 @@
 
     this.firstTimeLoad = true
     this.ajaxing = false
+    this.select_reload = false
 
     this.start_service = function() {
       this.init_data()
@@ -74,6 +75,7 @@
 
     // user drop down respond func
     this.choose_period = function(arg) {
+      this.select_reload = true
       if(arg == 0)
         this.currentapi = this.api0
       else if(arg == 1 ) 
@@ -98,7 +100,6 @@
     }
 
     this.confirm_popup = function (js_data) {
-      that.displayed_data = JSON.parse(JSON.stringify(js_data))
       this.render_table_data(js_data)
     }
 
@@ -169,6 +170,9 @@
 
     this.render_table_data = function(js_data) {
       //load sample data into the table
+      //$("#threat-table").html("")
+      $("#threat-table").tabulator("clearData");
+      that.displayed_data = JSON.parse(JSON.stringify(js_data))
       $("#threat-table").tabulator("setData", js_data);
       $("#threat-table").tabulator("setSort", "rating", "desc");
 
@@ -210,10 +214,16 @@
 
               if(that.firstTimeLoad) {
                 that.firstTimeLoad = false
-                that.displayed_data = JSON.parse(JSON.stringify(json))
                 that.setup_init_table()
+                that.displayed_data = JSON.parse(JSON.stringify(json))
                 that.render_table_data(json)
                 console.log("first time")
+              }
+
+
+              if(that.select_reload) {
+                that.render_table_data(json) 
+                that.select_reload = false         
               } else {
                 that.render_popup(json)
                 console.log(" not first time")
@@ -235,7 +245,7 @@
           timeout:2000
 
         });
-      },2000)
+      },1000)
 
 
     }
