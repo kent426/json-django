@@ -39,10 +39,6 @@ def getmeta(request, periodtype):
     	#convert whitespace characters(defined in string.whitespace) to a single space
     	text = text.translate(str.maketrans("\t\n\r\x0b\x0c", "     "))
 
-    	#print(text)
-    	# js_str = json.dumps(text)
-    	# obj = json.loads(js_str)
-    	# print(js_str)
 
     	#safely evaluate the string to python list
     	list_data = ast.literal_eval(text)
@@ -51,6 +47,12 @@ def getmeta(request, periodtype):
     	cur_date = datetime.now()
 
     	js_data = []
+    	"""
+    	determine returned json
+    	0(default): for 24 hours
+    	1: for 7 days
+    	2: for 4 weeks
+    	"""
     	if periodtype == "1" :
     		start_week = cur_date - timedelta(7)
     		js_data = list(filter(lambda record: datetime.strptime(record["date"], '%b %d, %Y %H:%M:%S') > start_week and datetime.strptime(record["date"], '%b %d, %Y %H:%M:%S') < cur_date, list_data))
@@ -60,8 +62,7 @@ def getmeta(request, periodtype):
     	else:
     		start_today = cur_date - timedelta(1)
     		js_data = list(filter(lambda record: datetime.strptime(record["date"], '%b %d, %Y %H:%M:%S') > start_today and datetime.strptime(record["date"], '%b %d, %Y %H:%M:%S') < cur_date, list_data))
-    	#%b %d, %Y %H %M %S
-    	print(js_data)
+    	#print(js_data)
 
 
     	
