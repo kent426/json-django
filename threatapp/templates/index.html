@@ -32,7 +32,7 @@
 </head>
 
 <body>
-  <h1>Metafile Record Table</h1>
+  <h3 class="display-4 text-center">Metafile Record Table</h3>
   <div id="threat-table"> </div>
 </body>
 </html>
@@ -102,7 +102,7 @@
               {title:"Rating", field:"rating",align:"center"},
               {title:"Action", field:"action", align:"center"},
               {title:"Submit-Type", field:"submit-type",align:"center"},
-              {title:"Date", field:"date", sorter:"date", align:"center"},
+              {title:"Date", field:"date", sorter:"date",sorterParams:{format:"MMM DD, YYYY HH:MM:SS"}, align:"center"},
           ],
         rowFormatter:function(row){
         //row - row component
