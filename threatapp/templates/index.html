@@ -32,8 +32,17 @@
 </head>
 
 <body>
-  <h3 class="display-4 text-center">Metafile Record Table</h3>
-  <div id="threat-table"> </div>
+  <h3 class=" text-center">Metafile Record Table</h3>
+
+ 
+          <select class="form-control " id="period-select" style="width: 10%; float: right;">
+            <option value="0" >24 Hours</option>
+            <option value="1">7 Days</option>
+            <option value="2">4 Weeks</option>
+          </select>          
+
+        
+  <div id="threat-table" style="clear: both;"> </div>
 </body>
 </html>
 <script type="text/javascript">
@@ -49,6 +58,7 @@
     this.api2 = api2
 
     this.firstTimeLoad = true
+    this.ajaxing = false
 
     this.start_service = function() {
       this.init_data()
@@ -69,7 +79,7 @@
       else if(arg == 1 ) 
         this.currentapi = this.api1
       else
-        this,currentapi = this.api2
+        this.currentapi = this.api2
     }
 
     this.is_latest = function(cur_data, server_data) {
@@ -79,7 +89,7 @@
     } 
 
     this.render_popup = function(js_data) {
-
+      
 
     }
 
@@ -94,6 +104,8 @@
     this.render_table = function(js_data) {
 
       $("#threat-table").tabulator({
+        selectable:false,
+        responsiveLayout : true, 
         height:"100%",// set height of table, this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
           layout:"fitColumns", //fit columns to width of table (optional)
           responsiveLayout:true,
@@ -132,6 +144,7 @@
               default:
                   row.getElement().css({"background-color":"white"})
           }
+
         },
       });
 
@@ -139,6 +152,16 @@
       $("#threat-table").tabulator("setData", js_data);
 
       $(".tabulator-col-title").css("text-align","center")
+
+      // //reset cell height
+      // $(".tabulator-row").css("height","50px")
+      // $(".tabulator-cell").css("height","50px")
+
+      // // //center the text in table cells
+      // $(".tabulator-cell").css("display","table-cell")
+      // $(".tabulator-cell").css("vertical-align","middle")
+
+      
 
       //$(".tabulator-tableHolder").css("background","white")
 
@@ -151,6 +174,12 @@
       that = this
 
       setInterval(function() {
+        console.log(that.ajaxing)
+        if(that.ajaxing) {
+          return
+        }
+        console.log("ajax start")
+        that.ajaxing = true 
         $.ajax({
           url : that.currentapi, // the endpoint,commonly same url
           type : "GET", // http method
@@ -184,10 +213,14 @@
           error : function(xhr,errmsg,err) {
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
           },
+          complete: function() {
+            that.ajaxing = false
+            console.log("ajax complete")
+          },
           timeout:2000
 
         });
-      },1000)
+      },2000)
 
 
     }
@@ -205,6 +238,10 @@
 
     dataManager = new DataManager(api0,api1,api2)
     dataManager.start_service()
+
+    $('#period-select').on('change', function() {
+      dataManager.choose_period(this.value)
+    })
     console.log(base)
     console.log(api0)
 

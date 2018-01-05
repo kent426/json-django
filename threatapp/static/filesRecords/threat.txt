@@ -12,5 +12,12 @@
 ‘action’: ‘files-added’,
 ‘submit-type’: ‘FG300B3910602113/root’,
 ‘rating’: ‘low-risk’
+},
+{
+‘date’: ‘Jan 1, 2015 13:12:59’,
+‘filename’: ‘helper.exe’,
+‘action’: ‘files-added’,
+‘submit-type’: ‘FG300B3910602113/root’,
+‘rating’: ‘low-risk’
 }
 ]
